@@ -211,11 +211,8 @@ def assign_attributes(model, **kwargs):
 
 def primary_key_names(model):
     """Returns all the primary keys for a model."""
-    return [key for key, field in inspect.getmembers(model)
-            if isinstance(field, QueryableAttribute)
-            and isinstance(field.property, ColumnProperty)
-            and field.property.columns[0].primary_key]
-
+    mapper = sqlalchemy_inspect(model)
+    return [column.name for column in mapper.primary_key]
 
 def primary_key_name(model_or_instance):
     """Returns the name of the primary key of the specified model or instance
